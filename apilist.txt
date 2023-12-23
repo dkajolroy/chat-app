@@ -1,0 +1,19 @@
+
+
+API List===>
+
+api/auth/signup -post   signup
+api/auth/signin -post   login
+api/group  -post/get    create / get
+/api/message    - get / socket 
+api/user
+
+
+Socket Work ===>
+1. online user
+2. notifications
+3. send message and store into database
+4. send notifications and store into database
+5. group chats
+6. Typing events
+7. Seen delivery send event 
