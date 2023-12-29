@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import prisma from "../../utils/prisma";
+import { createMessageGroup, getMessage } from "../controlls/message.controll";
 
 const messageEvents = (socket: Socket, io: Server) => {
   // join group
@@ -7,28 +7,23 @@ const messageEvents = (socket: Socket, io: Server) => {
     socket.join(groupId);
   });
 
+  socket.on("get_massases", async (groupId) => {
+    if (groupId) {
+      const messages = await getMessage(groupId);
+      io.to(groupId).emit("resive_message", messages);
+    }
+  });
+
   // Send message to group
   socket.on(
     "send_message",
     async (data: { message: string; groupId: string; senderId: string }) => {
       if (!data.groupId) return false;
-      await prisma.group.update({
-        where: {
-          id: data.groupId,
-        },
-        data: {
-          lastMessage: data.message || "Send Atachment",
-          lastMessageBy: data.senderId,
-          message: {
-            create: {
-              message: data.message,
-              userId: data.senderId,
-            },
-          },
-        },
-      });
-
-      socket.to(data.groupId).emit("resive_message", { message: data.message });
+      // update group last message and user
+      await createMessageGroup(data);
+      // find all message to send
+      const messages = await getMessage(data.groupId);
+      io.to(data.groupId).emit("resive_message", messages);
     }
   );
 };

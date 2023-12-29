@@ -5,14 +5,17 @@ export default function Sidebar() {
   const { data, isLoading } = useGroup();
 
   return (
-    <div className="w-[300px] hidden md:flex flex-col gap-2  overflow-y-scroll  h-screen">
+    <div className="md:w-[300px] w-[80px]  flex-col gap-2  overflow-y-scroll  h-screen">
       <div className="flex flex-col gap-4 p-2">
-        <h2 className="text-center text-2xl ">Mesenger</h2>
+        <h2 className="text-center text-2xl ">
+          <span className="md:block hidden">Mesenger</span>
+          <span className="md:hidden block">M</span>
+        </h2>
 
         <input
           type="text"
           placeholder="Search..."
-          className="border w-full p-1.5 outline-none focus:border-teal-500 rounded"
+          className="border w-full text-xs md:text-base p-1.5 outline-none focus:border-teal-500 rounded"
         />
       </div>
       {isLoading ? (

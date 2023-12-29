@@ -49,6 +49,7 @@ export default function TypeMessage() {
         </button>
         <input
           onChange={onChanage}
+          onKeyUp={(e) => e.key === "Enter" && sendMessage()}
           value={formdata.message}
           type="text"
           placeholder="Type to message"

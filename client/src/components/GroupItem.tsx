@@ -49,21 +49,22 @@ function Group({ item, params, fUser, isOnline, members, user }: Props) {
       to={`/${item.id}`}
       className={`flex ${
         params?.chatId === item.id ? "bg-slate-100" : "bg-white"
-      } p-2 gap-2 items-center hover:ps-5 transition-all  hover:bg-slate-100 border-y`}
+      } p-2 gap-2 items-center md:hover:ps-5 transition-all  hover:bg-slate-100 border-y`}
     >
-      <div className="h-10 w-10 rounded-full bg-slate-400"></div>
-      <div className="flex flex-col w-[calc(100%-40px)]">
+      <div className="h-10 w-10 flex justify-end items-end  rounded-full bg-slate-400">
+        <span
+          className={`h-[10px] w-[10px] block rounded-full ${
+            isOnline ? "bg-green-500 border" : "bg-slate-300"
+          }`}
+        ></span>
+      </div>
+      <div className="hidden md:flex flex-col w-[calc(100%-40px)]">
         <div className="flex justify-between items-center">
           {fUser ? (
             <h2 className="text-lg">{fUser.name}</h2>
           ) : (
             <h2 className="text-lg">This is Group</h2>
           )}
-          <span
-            className={`h-2 w-2 rounded-full ${
-              isOnline ? "bg-green-500" : "bg-slate-300"
-            }`}
-          ></span>
         </div>
         <div className="flex justify-between flex-wrap ">
           {lastMessageBy && (

@@ -12,7 +12,7 @@ export default function ChatLayout({ children }: Props) {
   return (
     <div className=" flex justify-center ">
       <Sidebar />
-      <div className="md:w-[calc(100vw-300px)] bg-white">
+      <div className="md:w-[calc(100vw-300px)] w-[calc(100vw-80px)]  bg-white">
         {!params.chatId ? (
           <div className="flex justify-center flex-col items-center min-h-screen">
             <h2 className="text-2xl font-medium">No chats selected</h2>

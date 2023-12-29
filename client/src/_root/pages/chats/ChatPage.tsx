@@ -1,50 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useSWRConfig } from "swr";
 import TimeAgo from "timeago-react";
 import { useSocketContext } from "../../../context/SocketProvider";
-import { useMessage } from "../../../hooks/useMessage";
 import { RootState } from "../../../store/store";
 import ChatLayout from "./ChatLayout";
 
 export default function ChatPage() {
   const { socket } = useSocketContext();
-  const { mutate } = useSWRConfig();
   const params = useParams();
+  const [messages, setmessages] = useState<Message[]>([]);
   socket.emit("join_group", params.chatId as string); // socket join
 
   useEffect(() => {
-    socket.on("resive_message", () => {
-      console.log("resive called");
-      mutate(`/api/message/${params.chatId}`);
-      mutate(`/api/group`);
+    socket.emit("get_massases", params.chatId); // intialil get messages event
+
+    socket.on("resive_message", (response) => {
+      // initial get messages response
+      setmessages(response);
     });
-    var objDiv = document.getElementById("scroll");
-    objDiv?.scrollTo({ top: objDiv?.scrollHeight });
-  }, [socket]);
+  }, []);
 
   // get my data
   const { user } = useSelector((s: RootState) => s.auth);
-  // get older messages
-  const { data, isLoading } = useMessage(params.chatId as string);
 
   return (
     <ChatLayout>
-      <div
-        id="scroll"
-        className="flex flex-col p-5 h-[calc(100vh-96px)] gap-2 overflow-y-scroll"
-      >
-        {isLoading ? (
-          <div className="h-20 flex items-center justify-center">
-            <h2 className="text-3xl">Loading</h2>
-          </div>
-        ) : !data ? (
-          <div className="h-full flex justify-center items-center text-2xl">
-            <h2>Message empty</h2>
-          </div>
+      <div className="flex flex-col-reverse p-5 h-[calc(100vh-96px)] gap-2 overflow-y-scroll">
+        {!messages.length ? (
+          <div className="flex justify-center items-center">Message Empty</div>
         ) : (
-          data.map((item, index) => (
+          messages.map((item, index) => (
             <div
               key={index}
               className={`flex ${

@@ -21,6 +21,9 @@ const GET = async (req: Request, res: Response, next: NextFunction) => {
           },
         },
       },
+      orderBy: {
+        created_at: "desc",
+      },
     });
 
     res.status(200).send(message);
